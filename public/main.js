@@ -3,11 +3,15 @@ const path = require('path');
 const XLSX = require('xlsx');
 const fs = require('fs');
 
+let pathWay = '';
+
 async function handleFileOpen() {
     const {canceled, filePaths} = await dialog.showOpenDialog()
     if (canceled) {
         return
     } else {
+        pathWay = filePaths[0];
+        console.log('pathWay',pathWay);
         return parseFile(filePaths[0]);
     }
 }
@@ -59,7 +63,9 @@ function createWindow() {
 }
 
 const handleOnLoadCover = async (_, src) => {
-    const base64 = fs.readFileSync(`${path.join(__dirname,`${src.replace('.','')}.jpg`)}`).toString('base64');
+    console.log('pathWay - handleOnLoadCover', pathWay);
+    const rootDir = pathWay.split('/').slice(0,pathWay.split('/').length - 1).join('/');
+    const base64 = fs.readFileSync(`${path.join(rootDir,`${src.replace('.','')}.jpg`)}`).toString('base64');
     return base64;
 }
 app.whenReady().then(() => {
