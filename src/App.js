@@ -1,6 +1,6 @@
 import './App.css';
 import React from 'react';
-import {accordionClasses, AppBar, Box, Button, CircularProgress, IconButton, Toolbar} from "@mui/material";
+import {AppBar, Backdrop, Box, Button, CircularProgress, Toolbar} from "@mui/material";
 import Books from "./entites/Books";
 import styled from "@emotion/styled";
 import Book from "./entites/Book";
@@ -17,15 +17,18 @@ const getXlsxParsedData = async () => {
     return response;
 }
 
+
+
 function App() {
-    const [loading, setLoading] = React.useState(true);
+    const [loading, setLoading] = React.useState(false);
     const [data, setData] = React.useState([]);
     const [activeBook, setActiveBook] = React.useState(undefined);
+
     const handleOnClick = async () => {
-        const response = await window.electronAPI.parseFile();
+        setLoading(true);
+        const response = await window.electronAPI.openFile();
         setData(response);
         setLoading(false);
-        console.log('response', response);
     }
 
     const handleOnRowClick = (book) => {
@@ -42,23 +45,28 @@ function App() {
 
     return (
         <div className="App">
-                <AppBar position="static">
-                    <Toolbar>
-                        <Typography  variant="h6" component="div" sx={{ flexGrow: 0 }}>
-                            Информация о книге
-                        </Typography>
-                    </Toolbar>
-                </AppBar>
+            <AppBar position="static">
+                <Toolbar>
+                    <Typography variant="h6" component="div" sx={{flexGrow: 0}}>
+                        Информация о книге
+                    </Typography>
+                </Toolbar>
+            </AppBar>
 
-            {data.length === 0 ? <Button onClick={handleOnClick}>Load xlsx</Button> : null}
+            {data.length === 0 && loading === false ? <Button onClick={handleOnClick}>Load xlsx</Button> : null}
 
             {loading ? (<Box sx={{display: 'flex'}}>
-                    <CircularProgress/>
+                    <Backdrop
+                        sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+                        open={true}
+                    >
+                        <CircularProgress color="inherit" />
+                    </Backdrop>
                 </Box>)
                 : <>
                     <Container>
-                        <Books data={data} onRowClick={handleOnRowClick}/>
-                        {activeBook ? <Book book={activeBook} /> : null}
+                        {data.length !== 0 ? <Books data={data} onRowClick={handleOnRowClick}/> : null}
+                        {activeBook ? <Book book={activeBook}/> : null}
                     </Container>
                 </>}
         </div>

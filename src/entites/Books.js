@@ -1,6 +1,5 @@
 import {CardActionArea, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow} from "@mui/material";
 import Typography from "@mui/material/Typography";
-import OutlinedCard from "./Book";
 import React from "react";
 
 function Books({data, onRowClick}) {
