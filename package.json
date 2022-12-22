@@ -2,7 +2,7 @@
   "name": "electron-react-lib",
   "version": "0.1.0",
   "private": true,
-  "main": "public/main.js",
+  "main": "public/electron.js",
   "productionName": "Lib",
   "dependencies": {
     "@emotion/react": "^11.10.5",
@@ -26,7 +26,7 @@
     "electron-dev": "electron .",
     "electronTest": "cross-env NODE_ENV=development electron .",
     "both": "NODE_ENV=development npm run start & npm run electron-dev",
-    "package": "electron-builder build --mac --win -c.extraMetadata.main=build/main.js --publish never",
+    "package": "electron-builder build --mac --win -c.extraMetadata.main=build/electron.js --publish never",
     "start-electron": "export ELECTRON_START_URL=http://localhost:3000 && electron ."
   },
   "eslintConfig": {
